@@ -7,18 +7,21 @@ router.get('/todo', (req, res) => {
     res.status(200).json({ todos: todos });
 });
 router.post('/todo', (req, res) => {
+    const body = req.body;
     const new_todo = {
         id: new Date().toISOString(),
-        text: req.body.text
+        text: body.text
     };
     todos.push(new_todo);
     res.status(201).json({ message: 'ToDo Added Successfully' });
 });
 router.put('/todo/:todoId', (req, res) => {
-    const id = req.params.todoId;
+    const body = req.body;
+    const params = req.params;
+    const id = params.todoId;
     const todo_index = todos.findIndex(todo_item => todo_item.id == id);
     if (todo_index >= 0) {
-        todos[todo_index] = { id: todos[todo_index].id, text: req.body.text };
+        todos[todo_index] = { id: todos[todo_index].id, text: body.text };
         res.status(201).json({ message: 'ToDo Updated Successfully', ToDos: todos });
     }
     else {
@@ -26,7 +29,8 @@ router.put('/todo/:todoId', (req, res) => {
     }
 });
 router.delete('/todo/:todoId', (req, res) => {
-    const id = req.params.todoId;
+    const params = req.params;
+    const id = params.todoId;
     const todo_index = todos.findIndex(todo_item => todo_item.id == id);
     if (todo_index >= 0) {
         todos.splice(todo_index, 1);
